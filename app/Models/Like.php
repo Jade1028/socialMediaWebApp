@@ -13,6 +13,8 @@ class Like extends Model
         The like tables use the primary key of the user and post
         Therefore, the like belongs to a user and post
     */
+    protected $fillable = ['post_id', 'user_id'];
+
     public function user(){
         return $this->belongsTo(User::class);
     }
