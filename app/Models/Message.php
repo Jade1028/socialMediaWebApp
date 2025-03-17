@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Message extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['sender_id', 'receiver_id', 'content', 'created_at'];
 
     /*
         The message tables use the primary key of the user table

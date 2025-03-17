@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,15 @@ Route::controller(HomeController::class)->group(function(){
     Route::get('/home', 'index')->name('home');
     Route::get('/about','about')->name('about');
     Route::get('/contact','contact')->name('contact');
+});
+
+
+Route::controller(MessageController::class)->group(function(){
+    Route::get('/message/{id}', 'index')->name('messages.index');
+    Route::post('/message/{id}', 'store')->name('message.send');
+    Route::get('/message/edit/{id}', 'edit')->name('message.edit');
+    Route::post('/message/update/{id}', 'update')->name('message.update');
+    Route::delete('/message/delete/{id}', 'destroy')->name('message.delete');
 });
 
 Route::get('/friends', [FriendController::class, 'index'])->name('friends')->middleware('auth');

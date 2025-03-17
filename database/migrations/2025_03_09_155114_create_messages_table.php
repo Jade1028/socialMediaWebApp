@@ -18,6 +18,7 @@ class CreateMessagesTable extends Migration
             $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');  //Create the foreign key sender id
             $table->foreignId('receiver_id')->constrained('users')->onDelete('cascade');  //Create the foreign key receiver id
             $table->text('content');
+            $table->index(['sender_id', 'receiver_id']); //Create the index for the sender and receiver id
             $table->timestamps();
         });
     }
