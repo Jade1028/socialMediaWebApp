@@ -7,12 +7,22 @@ use Illuminate\Http\Request;
 
 class FriendController extends Controller
 {
-    public function index(){
-        $friends1 = auth()->user()->friends;
-        $friends2 = auth()->user()->friendsOf;
-        $friends = $friends1->merge($friends2);
-        return view('pages.friends', ['friends'=>$friends]);
+    public function index() {
+        $userId = auth()->id();
+    
+        // Fetch friendships where the user is either user_id1 or user_id2
+        $friendships = Friend::where('user_id1', $userId)
+                             ->orWhere('user_id2', $userId)
+                             ->get();
+    
+        // Extract the actual friends (other user in the friendship)
+        $friends = $friendships->map(function ($friendship) use ($userId) {
+            return $friendship->user_id1 == $userId ? $friendship->user2 : $friendship->user1;
+        });
+    
+        return view('pages.friends', ['friends' => $friends]);
     }
+    
 
     public function store($id){
         $friend = new Friend;
