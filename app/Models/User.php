@@ -52,14 +52,16 @@ class User extends Authenticatable
     /*
         The users can have many friends
         1st: The user is the user_id1
+            -'user_id1' is the foreign key in friend table that references the id of the user
         2nd: The user is the user_id2
+            -'user_id2' is the foreign key in friend table that references the id of the user            
     */
     public function friends(){
-        return $this->hasMany(Friend::class, 'user_id1');
+        return $this->hasMany(Friend::class, 'user_id1')->where('status', 'accepted');
     }
 
     public function friendsOf(){
-        return $this->hasMany(Friend::class, 'user_id2');
+        return $this->hasMany(Friend::class, 'user_id2')->where('status', 'accepted');
     }
 
     /**
