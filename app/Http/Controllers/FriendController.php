@@ -11,14 +11,13 @@ class FriendController extends Controller
         $userId = auth()->id();
     
         // Fetch friendships where the user is either user_id1 or user_id2
-        $friendships = Friend::where('user_id1', $userId)
-                             ->orWhere('user_id2', $userId)
-                             ->get();
+        // $friendships = Friend::where('user_id1', $userId)
+        //                      ->orWhere('user_id2', $userId)
+        //                      ->get();
 
-        // $f1 = auth()->user()->friends;
-        // $f2 = auth()->user()->friendsOf;
-        // $friendships = $f1->merge($f2);
-
+        $f1 = auth()->user()->friends;
+        $f2 = auth()->user()->friendsOf;
+        $friendships = $f1->merge($f2);
 
                     
         // Filter the friendships by status
