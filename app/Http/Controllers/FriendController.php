@@ -15,7 +15,7 @@ class FriendController extends Controller
                              ->orWhere('user_id2', $userId)
                              ->get();
 
-        // Filter the friendships to only include accepted ones
+        // Filter the friendships by status
         $accepted = $friendships->where('status', 'accepted');
         $pending = $friendships->where('status', 'pending');
 
