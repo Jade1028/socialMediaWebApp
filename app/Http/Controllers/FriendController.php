@@ -31,7 +31,10 @@ class FriendController extends Controller
         return view('pages.friends', ['acceptedFriends' => $acceptedFriends, 'pendingFriends'=> $pendingFriends]);
     }
     
-
+    /**
+     * Gotcha: user_id1 is always the user who sent the friend request
+     * Gotcha: user_id2 is always the user who received the friend request
+     */
     public function store($id){
         $friend = new Friend;
         $friend->user_id1 = auth()->id();
