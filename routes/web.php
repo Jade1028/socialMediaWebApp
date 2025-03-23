@@ -43,8 +43,11 @@ Route::controller(MessageController::class)->group(function(){
     Route::delete('/message/delete/{id}', 'destroy')->name('message.delete');
 });
 
-Route::get('/friends', [FriendController::class, 'index'])->name('friends')->middleware('auth');
-Route::get('/friends/add/{id}', [FriendController::class, 'store'])->name('friends.store')->middleware('auth');
+Route::middleware('auth')->controller(FriendController::class)->group(function(){
+    Route::get('/friends','index')->name('friends');
+    Route::get('/friends/add/{id}','store')->name('friends.store');
+    Route::get('/friends/accept/{id}','accept')->name('friends.accept');
+});
 
 Route::middleware('auth')->controller(UserController::class)->group(function(){
     Route::get('/users','userView')->name('users.view');
