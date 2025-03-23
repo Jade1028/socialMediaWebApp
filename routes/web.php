@@ -32,6 +32,7 @@ Route::controller(HomeController::class)->group(function(){
     Route::get('/home', 'index')->name('home');
     Route::get('/about','about')->name('about');
     Route::get('/contact','contact')->name('contact');
+    Route::get('/profile','profile')->name('profile');
 });
 
 
@@ -47,6 +48,7 @@ Route::middleware('auth')->controller(FriendController::class)->group(function()
     Route::get('/friends','index')->name('friends');
     Route::get('/friends/add/{id}','store')->name('friends.store');
     Route::get('/friends/accept/{id}','accept')->name('friends.accept');
+    Route::get('/friends/reject/{id}','reject')->name('friends.reject');
 });
 
 Route::middleware('auth')->controller(UserController::class)->group(function(){

@@ -17,7 +17,7 @@
 						<p style="margin-right: 10px;">{{ $friend->name }}</p> {{-- Assuming $friend is a User model and has a 'name' attribute --}}
 						<a href="{{ route('messages.index', ['id' => $friend->id]) }}" class="btn btn-primary btn-sm">Message</a>
 						<a href="{{route('friends.accept', $friend->id)}}" class="btn btn-success btn-sm">Accept</a>
-						<a href="" class="btn btn-danger btn-sm">Reject</a>
+						<a href="{{route('friends.reject', $friend->id)}}" class="btn btn-danger btn-sm">Reject</a>
 					</div>
 				@endforeach
 			</section>

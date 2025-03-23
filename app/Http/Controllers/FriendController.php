@@ -31,7 +31,6 @@ class FriendController extends Controller
 
         // Extract the friend requests sent to the user
         $pendingFriends = $pending->map(function ($friendship) use ($userId) {
-            // return $friendship->user_id2 == $userId ? $friendship->user1 : $friendship->user1;
             if($friendship->user_id2 == $userId){
                 return $friendship->user1;
             }
@@ -61,6 +60,16 @@ class FriendController extends Controller
 
         $friend->status = 'accepted';
         $friend->save();
+
+        return back();
+    }
+
+    public function reject($id){
+        $friend = Friend::where('user_id1', $id)
+                        ->where('user_id2', auth()->id())
+                        ->first();
+
+        $friend->delete();
 
         return back();
     }
