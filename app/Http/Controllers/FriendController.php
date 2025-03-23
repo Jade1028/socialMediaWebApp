@@ -15,6 +15,12 @@ class FriendController extends Controller
                              ->orWhere('user_id2', $userId)
                              ->get();
 
+        // $f1 = auth()->user()->friends;
+        // $f2 = auth()->user()->friendsOf;
+        // $friendships = $f1->merge($f2);
+
+
+                    
         // Filter the friendships by status
         $accepted = $friendships->where('status', 'accepted');
         $pending = $friendships->where('status', 'pending');
@@ -22,7 +28,7 @@ class FriendController extends Controller
         // Extract the actual friends (other user in the friendship)
         $acceptedFriends = $accepted->map(function ($friendship) use ($userId) {
             return $friendship->user_id1 == $userId ? $friendship->user2 : $friendship->user1;
-        });
+        })->filter();
 
         // Extract the friend requests sent to the user
         $pendingFriends = $pending->map(function ($friendship) use ($userId) {
