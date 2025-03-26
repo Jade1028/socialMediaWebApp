@@ -43,7 +43,9 @@
                                             @endif
                                         </button>
                                     </form>
-                                    <button>Comment</button>
+                                    <a href="{{ route('posts.show', $post->id) }}">
+                                        <button>Comment ({{ $post->comments->count() }})</button>
+                                    </a>
                                     <button>Send</button>
                                 </div>
                             </div>

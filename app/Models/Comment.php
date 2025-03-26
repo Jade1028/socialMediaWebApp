@@ -14,6 +14,8 @@ class Comment extends Model
         Therefore, the comment belongs to a user and post
     */
 
+    protected $fillable = ['post_id', 'user_id', 'content'];
+
     public function user(){
         return $this->belongsTo(User::class);
     }

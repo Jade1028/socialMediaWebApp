@@ -60,3 +60,5 @@ Route::middleware('auth')->controller(UserController::class)->group(function(){
 Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{postId}/toggle-like', [PostController::class, 'toggleLike'])->name('posts.toggleLike');
 });
+Route::get('/posts/{postId}', [PostController::class, 'show'])->name('posts.show');
+Route::post('/posts/{postId}/comment', [PostController::class, 'addComment'])->name('posts.comment');
