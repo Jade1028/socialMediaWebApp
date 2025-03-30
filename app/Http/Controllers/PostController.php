@@ -11,17 +11,28 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('likes')->orderBy('created_at', 'desc')->paginate(5);
-        return view('pages.index', ['posts' => $posts]);
+        return view('home', ['posts' => $posts]);
     }
 
     public function create()
     {
-
+        return view('pages.create');
     }
 
-    public function store()
+    public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
 
+        Post::create([
+            'title' => $request->title,
+            'content' => $request->content,
+            'user_id' => Auth::id(),
+        ]);
+
+        return redirect()->route('home')->with('success', 'Post created successfully.');
     }
 
     public function show($postId)
@@ -30,19 +41,41 @@ class PostController extends Controller
         return view('pages.post', compact('post'));
     }
 
-    public function edit()
+    public function edit(Post $post)
     {
+        if (Auth::id() !== $post->user_id) {
+            abort(403, 'Unauthorized');
+        }
 
+        return view('pages.edit', compact('post'));
     }
 
-    public function update()
-    {
-
+    public function destroy(Post $post)
+{
+    if (Auth::id() !== $post->user_id) {
+        abort(403, 'Unauthorized');
     }
+    $post->delete();
+    return redirect()->route('home')->with('success', 'Post deleted successfully.');
+}
 
-    public function destroy()
+    public function update(Request $request, Post $post)
     {
+        if (Auth::id() !== $post->user_id) {
+            abort(403, 'Unauthorized');
+        }
 
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        $post->update([
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
+
+        return redirect()->route('home')->with('success', 'Post updated successfully.');
     }
 
     public function toggleLike($postId)
@@ -62,18 +95,18 @@ class PostController extends Controller
     }
 
     public function addComment(Request $request, $postId)
-{
-    $request->validate([
-        'content' => 'required|string|max:500',
-    ]);
+    {
+        $request->validate([
+            'content' => 'required|string|max:500',
+        ]);
 
-    $post = Post::findOrFail($postId);
+        $post = Post::findOrFail($postId);
 
-    $post->comments()->create([
-        'user_id' => auth()->id(),
-        'content' => $request->input('content'),
-    ]);
+        $post->comments()->create([
+            'user_id' => auth()->id(),
+            'content' => $request->input('content'),
+        ]);
 
-    return redirect()->route('posts.show', $postId)->with('success', 'Comment added successfully!');
-}
+        return redirect()->route('posts.show', $postId)->with('success', 'Comment added successfully!');
+    }
 }

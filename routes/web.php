@@ -29,7 +29,7 @@ Route::get('/', function () {
 Auth::routes(); // This is the default authentication routes: /login, /register, /logout
 
 Route::controller(HomeController::class)->group(function(){
-    Route::get('/home', 'index')->name('home');
+    Route::get('/home', [PostController::class, 'index'])->name('home');
     Route::get('/about','about')->name('about');
     Route::get('/contact','contact')->name('contact');
     Route::get('/profile','profile')->name('profile');
@@ -58,7 +58,13 @@ Route::middleware('auth')->controller(UserController::class)->group(function(){
 
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
     Route::post('/posts/{postId}/toggle-like', [PostController::class, 'toggleLike'])->name('posts.toggleLike');
+    Route::post('/posts/{postId}/comment', [PostController::class, 'addComment'])->name('posts.comment');
 });
-Route::get('/posts/{postId}', [PostController::class, 'show'])->name('posts.show');
-Route::post('/posts/{postId}/comment', [PostController::class, 'addComment'])->name('posts.comment');
