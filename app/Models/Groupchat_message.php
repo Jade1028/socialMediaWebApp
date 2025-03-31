@@ -9,7 +9,7 @@ class Groupchat_message extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['group_chat_id', 'sender-id', 'message'];
+    protected $fillable = ['group_chat_id', 'sender_id', 'message'];
 
-    
+
 }
