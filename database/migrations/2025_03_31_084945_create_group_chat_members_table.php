@@ -15,8 +15,8 @@ class CreateGroupChatMembersTable extends Migration
     {
         Schema::create('group_chat_members', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('group_chat_id')->contrainted('group_chats')->onDelete('cascade');  //Foreign key for the group chat
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');  //Foreign key for the users
+            $table->foreignId('group_chat_id')->contrained('group_chats')->onDelete('cascade');  //Foreign key for the group chat
+            $table->foreignId('user_id')->constraied('users')->onDelete('cascade');  //Foreign key for the users
             $table->enum('role', ['admin', 'member'])->default('member');  //Role of the user in the group chat
             $table->timestamps();
         });

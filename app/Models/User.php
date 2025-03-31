@@ -86,6 +86,7 @@ class User extends Authenticatable
         return $this->hasMany(Like::class);
     }
 
+    
     /*
         The users can have many messages
         sentMessages: The user is the sender
@@ -96,13 +97,16 @@ class User extends Authenticatable
         return $this->hasMany(Message::class, 'sender_id');
     }
 
+
     public function receivedMessages()
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
 
+
     /*
         Get all groupchats the user is a member of
+        A user can be a member of many group chats
     */
     public function groupChats()
     {
@@ -110,6 +114,7 @@ class User extends Authenticatable
             ->withPivot('role')
             ->withTimestemps();
     }
+
 
     /*
         Get all group chats created by this user
