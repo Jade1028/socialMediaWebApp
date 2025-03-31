@@ -93,20 +93,4 @@ class PostController extends Controller
             return back()->with('success', 'Post liked.');
         }
     }
-
-    public function addComment(Request $request, $postId)
-    {
-        $request->validate([
-            'content' => 'required|string|max:500',
-        ]);
-
-        $post = Post::findOrFail($postId);
-
-        $post->comments()->create([
-            'user_id' => auth()->id(),
-            'content' => $request->input('content'),
-        ]);
-
-        return redirect()->route('posts.show', $postId)->with('success', 'Comment added successfully!');
-    }
 }
