@@ -23,13 +23,17 @@ class Groupchat_member extends Model
     /*
         Get the group chat this member belongs to
     */
-    public function groupMessage()
+    public function groupChat()
     {
-        return $this->hasMany(Groupchat_message::class, 'group_chat_id');
+        return $this->belongsTo(Groupchat::class, 'group_chat_id');
     }
 
 
     /*
         Get the user this member belongs to
     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
