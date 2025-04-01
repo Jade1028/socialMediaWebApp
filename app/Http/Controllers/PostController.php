@@ -68,10 +68,6 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         // *Laravel implicitly calls: $this->authorize('update', $post)
-        if (Auth::id() !== $post->user_id) {
-            abort(403, 'Unauthorized');
-        }
-
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
