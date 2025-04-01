@@ -45,10 +45,10 @@ class PostController extends Controller
         return redirect()->route('home')->with('success', 'Post created successfully.');
     }
 
-    public function show($postId)
+    public function show(Post $post)
     {
         // *Laravel implicitly calls: $this->authorize('view', $post)
-        $post = Post::with('comments.user')->findOrFail($postId);
+        $post->load('comments.user'); //eager loading
         return view('pages.post', compact('post'));
     }
 
