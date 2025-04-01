@@ -33,6 +33,11 @@ class MessageController extends Controller
         Create new message and store in database
     */
     public function store($id, Request $req){
+
+        $req->validate([
+            'content'=> 'required|string'
+        ]);
+
         $message = new Message();
         $message->sender_id = auth()->id();
         $message->receiver_id = $id;
