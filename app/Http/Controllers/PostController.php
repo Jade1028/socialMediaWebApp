@@ -6,21 +6,31 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class PostController extends Controller
 {
+    // Mapping this controller to PostPolicy
+    public function __construct()
+    {
+        $this->authorizeResource(Post::class);
+    }
+
     public function index()
     {
+        // *Laravel implicitly calls: $this->authorize('viewAny', $post)
         $posts = Post::with('likes')->orderBy('created_at', 'desc')->paginate(5);
         return view('home', ['posts' => $posts]);
     }
 
     public function create()
     {
+        // *Laravel implicitly calls: $this->authorize('create', $post)
         return view('pages.create');
     }
 
     public function store(Request $request)
     {
+        // *Laravel implicitly calls: $this->authorize('create', $post)
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -37,30 +47,27 @@ class PostController extends Controller
 
     public function show($postId)
     {
+        // *Laravel implicitly calls: $this->authorize('view', $post)
         $post = Post::with('comments.user')->findOrFail($postId);
         return view('pages.post', compact('post'));
     }
 
     public function edit(Post $post)
     {
-        if (Auth::id() !== $post->user_id) {
-            abort(403, 'Unauthorized');
-        }
-
+        // *Laravel implicitly calls: $this->authorize('update', $post)
         return view('pages.edit', compact('post'));
     }
 
     public function destroy(Post $post)
-{
-    if (Auth::id() !== $post->user_id) {
-        abort(403, 'Unauthorized');
+    {
+        // *Laravel implicitly calls: $this->authorize('delete', $post)
+        $post->delete();
+        return redirect()->route('home')->with('success', 'Post deleted successfully.');
     }
-    $post->delete();
-    return redirect()->route('home')->with('success', 'Post deleted successfully.');
-}
 
     public function update(Request $request, Post $post)
     {
+        // *Laravel implicitly calls: $this->authorize('update', $post)
         if (Auth::id() !== $post->user_id) {
             abort(403, 'Unauthorized');
         }

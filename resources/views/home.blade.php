@@ -53,14 +53,14 @@
                                     <button class="btn btn-secondary">Send</button>
                                 </div>
                                 @auth
-                                    @if(auth()->user()->id === $post->user_id)
-                                    <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-warning">Edit</a>
+                                    @can('update', $post)
+                                        <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-warning">Edit</a>
                                         <form action="{{ route('posts.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Delete</button>
                                         </form>
-                                    @endif
+                                    @endcan
                                 @endauth
                             </div>
                         @endforeach
