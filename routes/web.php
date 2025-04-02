@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
@@ -28,6 +30,17 @@ Route::get('/', function () {
 
 
 Auth::routes(); // This is the default authentication routes: /login, /register, /logout
+
+Route::get('/login/admin', [LoginController::class, 'showAdminLoginForm']);
+Route::get('/register/admin', [RegisterController::class, 'showAdminRegisterForm']);
+Route::post('/login/admin', [LoginController::class, 'adminLogin']);
+Route::post('/register/admin', [RegisterController::class, 'createAdmin']);
+
+Route::group(['middleware' => 'auth:admin'], function () {
+    Route::view('/admin', 'admin');
+});
+
+Route::get('logout', [LoginController::class, 'logout']);
 
 Route::controller(HomeController::class)->group(function(){
     Route::get('/home', [PostController::class, 'index'])->name('home');
