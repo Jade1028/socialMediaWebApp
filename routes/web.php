@@ -50,6 +50,7 @@ Route::middleware('auth')->controller(FriendController::class)->group(function()
     Route::get('/friends/add/{id}','store')->name('friends.store');
     Route::get('/friends/accept/{id}','accept')->name('friends.accept');
     Route::get('/friends/reject/{id}','reject')->name('friends.reject');
+    Route::get('/friends/remove/{id}','destroy')->name('friends.destroy');
 });
 
 Route::middleware('auth')->controller(UserController::class)->group(function(){

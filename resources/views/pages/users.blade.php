@@ -12,7 +12,7 @@
 				<div>
 					<strong>{{ $user->name }}</strong>
 					@if(auth()->user()->isFriend($user->id))
-						<a disabled>(Current Friend)</a>
+						<a href="{{route('friends.destroy', $user->id)}}" class="text-danger">Unfriend</a>
 					@elseif(auth()->user()->hasSentFriendRequestTo($user->id))
 						<a disabled>(Request Sent)</a>
 					@else
