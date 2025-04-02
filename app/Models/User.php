@@ -81,6 +81,22 @@ class User extends Authenticatable
         })->exists();
     }
 
+
+    // Check if the authenticated user and this user are friends
+    public function isFriend($userId){
+        return Friend::where(function($query) use ($userId){
+            $query->where('user_id1', auth()->id())
+                  ->where('user_id2', $userId)
+                  ->where('status', 'accepted');
+                  
+        })->orWhere(function($query) use ($userId){
+            $query->where('user_id1', $userId)
+                  ->where('user_id2', auth()->id())
+                  ->where('status', 'accepted');  
+        })->exists();
+    }
+    
+
     public function likes()
     {
         return $this->hasMany(Like::class);
