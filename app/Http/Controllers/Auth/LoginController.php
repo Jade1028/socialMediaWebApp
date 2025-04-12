@@ -58,8 +58,8 @@ class LoginController extends Controller
         }
 
         // auth fails, redirect back with input pre-filled and error message
-        return back()->withInput($request->only('email', 'remember'))->withErrors([
-            'email' => 'Invalid credentials'
+        return back()->withInput($request->only('name', 'remember'))->withErrors([
+            'name' => 'Invalid credentials'
         ]);
     }
 }
