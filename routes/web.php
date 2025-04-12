@@ -63,7 +63,7 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::controller(MessageController::class)->group(function () {
     Route::get('/message/{id}', 'index')->name('messages.index');
-    Route::post('/message/{id}', 'store')->name('message.send');
+    Route::post('/message/{id}', 'create')->name('message.send');
     Route::get('/message/edit/{id}', 'edit')->name('message.edit');
     Route::post('/message/update/{id}', 'update')->name('message.update');
     Route::delete('/message/delete/{id}', 'destroy')->name('message.delete');

@@ -20,7 +20,15 @@ class MessagePolicy
     public function view(User $user, Message $message, int $friendId)
     {
         //Check the sender user id and the receiver user id 
-        return $user->id === auth()->id() && ($message->sender_id === $user->id && $message->receiver_id === $friendId) || ($message->sender_id === $friendId && $message->receiver_id === $user->id);
+        return $user->id === auth()->id() && ($user->id === (int)$friendId || $this->areFriends($user->id, $friendId));
+    }
+    /**
+     * View policy helper
+    */
+    protected function areFriends(int $userId1, int $userId2)
+    {
+        //
+        return true;
     }
 
     /**
