@@ -19,7 +19,7 @@ class MessagePolicy
      */
     public function view(User $user, Message $message, int $friendId)
     {
-        //
+        //Check the sender user id and the receiver user id 
         return $user->id === auth()->id() && ($message->sender_id === $user->id && $message->receiver_id === $friendId) || ($message->sender_id === $friendId && $message->receiver_id === $user->id);
     }
 
@@ -58,6 +58,19 @@ class MessagePolicy
     public function delete(User $user, Message $message)
     {
         //Check if the user is the sender to delete the message
+        return $user->id === $message->sender_id;
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Message  $message
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function edit(User $user, Message $message)
+    {
+        //Check if the message sender is same as the user intended to change the message
         return $user->id === $message->sender_id;
     }
 }

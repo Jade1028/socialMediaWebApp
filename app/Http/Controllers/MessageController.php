@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class MessageController extends Controller
 {
@@ -13,9 +14,18 @@ class MessageController extends Controller
     /*
         This method will retieve all the messages between the user and the friend but will only display 20 messages per page
     */
-    public function index($id){
+    public function index($id)
+    {
         $user = auth()->user();
-        if($user){  //check if the user are authenticated
+
+        if($user)
+        {
+            $friend = User::findOrFail($id);
+
+            if(! Gate::allows('view', [new Message(), $friend->id])){
+                abort(403, 'Unauthorized to view messages with this user.');
+            }
+
             $allMessages = Message::where(function($query) use ($user, $id){
                 $query->where('sender_id', $user->id)
                     ->where('receiver_id', $id);
@@ -24,7 +34,7 @@ class MessageController extends Controller
                     ->where('receiver_id', $user->id);
             })->orderBy('created_at')->paginate(20);
 
-            return view('pages.message', ['messages'=>$allMessages, 'friend'=>User::find($id)]);
+            return view('pages.message', ['messages' => $allMessages, 'friend' => User::find($id)]);
         }
         return redirect()->route('login');
     }
@@ -32,11 +42,17 @@ class MessageController extends Controller
     /*
         Create new message and store in database
     */
-    public function store($id, Request $req){
+    public function create($id, Request $req)
+    {
+        $user = auth()->user();
 
         $req->validate([
             'content'=> 'required|string'
         ]);
+
+        if(! Gate::allows('create', Message::class)){
+            abort(403, 'Unauthorized to send messages.');
+        }
 
         $message = new Message();
         $message->sender_id = auth()->id();
@@ -50,13 +66,15 @@ class MessageController extends Controller
     /*
         This method will route the user to the message edition page
     */
-    public function edit($id){
+    public function edit($id)
+    {
         $message = Message::findOrFail($id);
 
         //Check the authenticated user is the sender of this message
-        if(auth()->id() !== $message->sender_id){
-            return redirect()->back()->with('error', 'You are not authorized to edit this message.');
+        if(! Gate::allows('edit', $message)){
+            abort(403, 'You are not allowed to edit this message.');
         }
+
         return view('pages.message-edit', ['message'=>$message, 'friend'=>User::find($message->receiver_id)]);
     }
 
@@ -67,8 +85,8 @@ class MessageController extends Controller
         $message = Message::findOrFail($id);
 
         //Check the authenticated user is the sender of this message
-        if(auth()->id() !== $message->sender_id){
-            return redirect()->back()->with('error', 'You are not authorized to edit this message.');
+        if(! Gate::allows('update', $message)){
+            abort(403, 'You are not allowed to edit this message.');
         }
 
         //Check the content is not empty and is string content
@@ -89,8 +107,8 @@ class MessageController extends Controller
         $message = Message::findOrFail($id);
 
         //Check the authenticated user is the sender of this message
-        if(auth()->id() !== $message->sender_id){
-            return redirect()->back()->with('error', 'You are not authorized to edit this message.');
+        if(! Gate::allows('delete', $message)){
+            abort(403, 'You are not allowed to delete this message.');
         }
 
         $receiverId = $message->receiver_id;
