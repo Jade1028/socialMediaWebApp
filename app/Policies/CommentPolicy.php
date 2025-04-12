@@ -16,6 +16,12 @@ class CommentPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
+    public function before(User $user){
+        if($user->is_banned){
+            abort(403, 'Your account has been permanently banned.');
+        }
+        return null;
+    }
     public function viewAny(User $user)
     {
         //

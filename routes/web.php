@@ -58,7 +58,6 @@ Route::get('logout', [LoginController::class, 'logout']);
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/about', 'about')->name('about');
-    Route::get('/contact', 'contact')->name('contact');
     Route::get('/profile', 'profile')->name('profile');
 });
 

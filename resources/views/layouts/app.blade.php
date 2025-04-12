@@ -51,9 +51,6 @@
                         <li class="nav-item">
                             <a class="nav-link {{ $textClass }}" href="{{ route('about') }}">{{ __('About') }}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ $textClass }}" href="{{ route('contact') }}">{{ __('Contact') }}</a>
-                        </li>
                         @endif
                     </ul>
 
