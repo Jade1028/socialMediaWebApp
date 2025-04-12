@@ -53,8 +53,6 @@ class LoginController extends Controller
             'password' => 'bail|required|min:6'
         ]);
 
-        Cookie::queue('theme', 'light'); // Set the theme cookie to light mode (default)
-
         if(Auth::guard('admin')->attempt(['name' => $request->name, 'password' => $request->password], $request->remember)){
             return redirect('/admin');
         }
