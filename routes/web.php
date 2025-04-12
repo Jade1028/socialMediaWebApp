@@ -41,6 +41,7 @@ Route::controller(RegisterController::class)->group(function(){
 
 Route::controller(AdminController::class)->middleware('auth:admin')->group(function () {
     Route::get('/admin', 'index');
+    Route::delete('/admin/delete-post/{id}', 'deletePost')->name('admin.deletePost');
 });
 
 Route::get('logout', [LoginController::class, 'logout']);
@@ -82,4 +83,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [PostController::class,'index'])->name('home');
     Route::resource('comments', CommentController::class)->except(['index', 'show']); 
 });
+
 
