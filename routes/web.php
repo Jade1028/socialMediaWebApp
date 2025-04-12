@@ -31,7 +31,7 @@ Auth::routes(); // This is the default authentication routes: /login, /register,
 
 Route::controller(LoginController::class)->group(function(){
     Route::get('/login/admin', 'showAdminLoginForm');
-    Route::post('/login/admin', 'adminLogin');
+    Route::post('/login/admin', 'adminLogin')->middleware('throttle:3,10');
 });
 
 Route::controller(RegisterController::class)->group(function(){
@@ -45,7 +45,7 @@ Route::controller(AdminController::class)->middleware('auth:admin')->group(funct
     Route::post('/admin/ban-user/{id}', 'banUser')->name('admin.banUser');
 });
 
-// Route::get('logout', [LoginController::class, 'logout']);
+Route::get('logout', [LoginController::class, 'logout']);
 
 Route::controller(HomeController::class)->group(function(){
     Route::get('/about','about')->name('about');
