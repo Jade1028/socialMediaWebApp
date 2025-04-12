@@ -34,7 +34,9 @@
 
                         @foreach($posts as $post)
                             <div class="post-card">
-                                <h2>{{ $post->title }}</h2>
+                                <h2>{{$post->user->name}}</h2>
+                                <hr>
+                                <h3>{{ $post->title }}</h3>
                                 <p>{{ $post->content }}</p>
 
                                 <div>
