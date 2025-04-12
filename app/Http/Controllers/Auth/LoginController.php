@@ -49,14 +49,14 @@ class LoginController extends Controller
 
     public function adminLogin(Request $request){
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6'
+            'name' => 'required',
+            'password' => 'bail|required|min:6'
         ]);
 
         Cookie::queue('theme', 'light'); // Set the theme cookie to light mode (default)
 
-        if(Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)){
-            return redirect()->intended('/admin');
+        if(Auth::guard('admin')->attempt(['name' => $request->name, 'password' => $request->password], $request->remember)){
+            return redirect('/admin');
         }
 
         // auth fails, redirect back with input pre-filled and error message
