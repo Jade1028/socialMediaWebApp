@@ -23,10 +23,10 @@
         @endif
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
+                <div class="card {{ $bgClass}} {{ $textClass}} {{ $borderClass}}">
                     <div class="card-header">{{ __('Posts') }}</div>
 
-                    <div class="card-body">
+                    <div class="card-body {{ $bgClass}} {{ $textClass}}">
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
                                 {{ session('status') }}
@@ -38,7 +38,7 @@
                         @endauth
 
                         @foreach($posts as $post)
-                            <div class="post-card">
+                            <div class="post-card {{ $bgClass}} {{ $textClass}}">
                                 <h2>{{$post->user->name}}</h2>
                                 <hr>
                                 <h3>{{ $post->title }}</h3>

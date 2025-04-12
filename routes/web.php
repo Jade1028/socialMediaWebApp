@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +27,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/toggle-theme', function () {
+    //retrive the cookies theme value
+    $theme = Cookie::get('theme');
+    //revert the cookies theme value
+    Cookie::queue('theme', $theme === 'dark' ? 'light' : 'dark', 60 * 24 * 30); // 30 days expiration
+    return back()->with('success', 'Theme changed successfully!');
+})->name('theme.toggle');
 
 Auth::routes(); // This is the default authentication routes: /login, /register, /logout
 

@@ -21,16 +21,16 @@
 
     @stack('styles')
 </head>
-<body>
+<body class="{{ $bgClass }} {{ $textClass }}">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm border {{ $borderClass }}">
             <div class="container">
                 @if(Auth::guard('admin')->check())
-                <a class="navbar-brand" href="{{ url('/admin') }}">
+                <a class="navbar-brand {{ $textClass }}" href="{{ url('/admin') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 @else
-                <a class="navbar-brand" href="{{ url('/home') }}">
+                <a class="navbar-brand {{ $textClass }}" href="{{ url('/home') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 @endif
@@ -40,19 +40,19 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav me-auto ">
                         @if(!Auth::guard('admin')->check())
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('friends')}}">{{ __('Friends') }}</a>
+                            <a class="nav-link {{ $textClass }}" href="{{route('friends')}}">{{ __('Friends') }}</a>
+                        </li>
+                        <li class="nav-item {{ $textClass }}">
+                            <a class="nav-link {{ $textClass }}" href="">{{ __('Messages') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">{{ __('Messages') }}</a>
+                            <a class="nav-link {{ $textClass }}" href="{{ route('about') }}">{{ __('About') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('about') }}">{{ __('About') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('contact') }}">{{ __('Contact') }}</a>
+                            <a class="nav-link {{ $textClass }}" href="{{ route('contact') }}">{{ __('Contact') }}</a>
                         </li>
                         @endif
                     </ul>
@@ -63,33 +63,33 @@
                         @guest
                         @if (Route::has('login'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            <a class="nav-link {{$textClass}}" href="{{ route('login') }}">{{ __('Login') }}</a>
                         </li>
                         @endif
 
                         @if (Route::has('register'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            <a class="nav-link {{$textClass}}" href="{{ route('register') }}">{{ __('Register') }}</a>
                         </li>
                         @endif
                         @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle {{$textClass}}" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 
                                 @if(Auth::guard('admin')->check())
-                                Hi, Admin {{ Auth::guard('admin')->user()->name}}
+                                <span class="{{$textClass}}">Hi, Admin {{ Auth::guard('admin')->user()->name}}</span> 
                                 @else
-                                {{ Auth::user()->name }}
+                                <span class="{{$textClass}}">{{ Auth::user()->name }}</span>
                                 @endif
                             </a>
 
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-end {{$bgClass}}" aria-labelledby="navbarDropdown">
                                 @if(!Auth::guard('admin')->check())
-                                <a class="dropdown-item" href="">
+                                <a class="dropdown-item {{$textClass}}" href="">
                                     {{ __('Profile') }}
                                 </a>
                                 @endif
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                <a class="dropdown-item {{$textClass}}" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
@@ -97,7 +97,18 @@
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
+                                <form action="{{route('theme.toggle')}}" method='post'>
+                                    @csrf
+                                    <button type="submit">
+                                        @if (request()->cookie('theme') === 'dark')
+                                        Switch to Light Mode
+                                        @else
+                                        Switch to Dark Mode
+                                        @endif
+                                    </button>
+                                </form>
                             </div>
+
                         </li>
                         @endguest
                     </ul>
@@ -109,20 +120,20 @@
             @yield('content')
         </main>
 
-        <footer class="bg-light text-center text-lg-start">
+        <footer class="text-center text-lg-start">
             <div class="container p-4">
                 <div class="row">
                     <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
                         <h5 class="text-uppercase">Follow Us</h5>
                         <ul class="list-unstyled mb-0">
                             <li>
-                                <a href="https://www.facebook.com/Y" class="text-dark" target="_blank">Facebook</a>
+                                <a href="https://www.facebook.com/Y"  target="_blank">Facebook</a>
                             </li>
                             <li>
-                                <a href="https://www.twitter.com/Y" class="text-dark" target="_blank">Twitter</a>
+                                <a href="https://www.twitter.com/Y"  target="_blank">Twitter</a>
                             </li>
                             <li>
-                                <a href="https://www.instagram.com/Y" class="text-dark" target="_blank">Instagram</a>
+                                <a href="https://www.instagram.com/Y" target="_blank">Instagram</a>
                             </li>
                         </ul>
                     </div>
@@ -134,7 +145,7 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center p-3 bg-dark text-white">
+            <div class="text-center p-3">
                 &copy; {{ date('Y') }} Y. All rights reserved.
             </div>
         </footer>

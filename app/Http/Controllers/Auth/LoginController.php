@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class LoginController extends Controller
 {
@@ -51,6 +52,8 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:6'
         ]);
+
+        Cookie::queue('theme', 'light'); // Set the theme cookie to light mode (default)
 
         if(Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)){
             return redirect()->intended('/admin');
