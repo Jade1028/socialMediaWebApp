@@ -5,8 +5,12 @@ namespace App\Providers;
 use App\Models\Friend;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Message;
+use App\Models\Comment;
+use App\Policies\CommentPolicy;
 use App\Policies\FriendPolicy;
 use App\Policies\PostPolicy;
+use App\Policies\MessagePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -23,6 +27,8 @@ class AuthServiceProvider extends ServiceProvider
         Post::class => PostPolicy::class,
         Friend::class => FriendPolicy::class,
         Comment::class => CommentPolicy::class,
+        Message::class => MessagePolicy::class,
+
     ];
 
     /**
