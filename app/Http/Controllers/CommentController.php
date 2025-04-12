@@ -26,18 +26,14 @@ class CommentController extends Controller
 
     public function edit(Comment $comment)
     {
-        if (Auth::id() !== $comment->user_id) {
-            abort(403);
-        }
+        $this->authorize('update', $comment);
 
         return view('comments.edit', compact('comment'));
     }
 
     public function update(Request $request, Comment $comment)
     {
-        if (Auth::id() !== $comment->user_id) {
-            abort(403);
-        }
+        $this->authorize('update', $comment);
 
         $request->validate([
             'content' => 'required|string|max:500',
@@ -50,9 +46,10 @@ class CommentController extends Controller
 
     public function destroy(Comment $comment)
     {
-        if (Auth::id() !== $comment->user_id) {
-            abort(403);
-        }
+        // if (Auth::id() !== $comment->user_id) {
+        //     abort(403);
+        // }
+        $this->authorize('delete', $comment);
 
         $comment->delete();
 
