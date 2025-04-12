@@ -31,6 +31,12 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    // authenticate using name instead of email
+    public function username()
+    {
+        return 'name';
+    }
+
     /**
      * Create a new controller instance.
      *
@@ -49,19 +55,17 @@ class LoginController extends Controller
 
     public function adminLogin(Request $request){
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6'
+            'name' => 'required',
+            'password' => 'bail|required|min:6'
         ]);
 
-        Cookie::queue('theme', 'light'); // Set the theme cookie to light mode (default)
-
-        if(Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)){
-            return redirect()->intended('/admin');
+        if(Auth::guard('admin')->attempt(['name' => $request->name, 'password' => $request->password], $request->remember)){
+            return redirect('/admin');
         }
 
         // auth fails, redirect back with input pre-filled and error message
-        return back()->withInput($request->only('email', 'remember'))->withErrors([
-            'email' => 'Invalid credentials'
+        return back()->withInput($request->only('name', 'remember'))->withErrors([
+            'name' => 'Invalid credentials'
         ]);
     }
 }
