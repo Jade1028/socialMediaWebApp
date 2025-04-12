@@ -10,13 +10,21 @@ class AdminController extends Controller
 {
     public function index(){
         $posts = Post::with(['likes', 'user'])->orderBy('created_at', 'desc')->paginate(5, ['*'], 'posts_page');
-        $users = User::paginate(5, ['*'], 'users_page');
-        return view('admin', compact('posts', 'users'));
+        $users = User::where('is_banned', false)->orWhere('is_banned', null)->orderBy('updated_at', 'desc')->paginate(5, ['*'], 'users_page');
+        $bannedUsers = User::where('is_banned', true)->orderBy('updated_at', 'desc')->paginate(5, ['*'], 'banned_users_page');
+        return view('admin', compact('posts', 'users', 'bannedUsers'));
     }
 
     public function deletePost($id){
         $post = Post::findOrFail($id);
         $post->delete();
         return redirect()->back()->with('success', 'Post deleted successfully.');
+    }
+
+    public function banUser($id){
+        $user = User::findOrFail($id);
+        $user->is_banned = true;
+        $user->save();
+        return redirect()->back()->with('success', 'User banned successfully.');
     }
 }
