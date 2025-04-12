@@ -40,7 +40,7 @@
     @endif
     <div class="dashboard-container">
         <div class="col-md-4">
-            <div class="card">
+            <div class="card {{$bgClass}} {{$textClass}} {{$borderClass}}">
                 <div class="card-header">Posts</div>
                 <div class="card-body">
                     @foreach($posts as $post)
@@ -65,7 +65,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card">
+            <div class="card {{$bgClass}} {{$textClass}} {{$borderClass}}">
                 <div class="card-header">Users</div>
                 <div class="card-body">
                     @foreach($users as $user)
@@ -93,7 +93,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card">
+            <div class="card {{$bgClass}} {{$textClass}} {{$borderClass}}">
                 <div class="card-header">Banned Users</div>
                 <div class="card-body">
                     @foreach($bannedUsers as $bannedUser)
