@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\FriendController;
@@ -26,28 +27,30 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/y', [PostController::class, 'index'])->name('y.index');
-
-
 Auth::routes(); // This is the default authentication routes: /login, /register, /logout
 
-Route::get('/login/admin', [LoginController::class, 'showAdminLoginForm']);
-Route::get('/register/admin', [RegisterController::class, 'showAdminRegisterForm']);
-Route::post('/login/admin', [LoginController::class, 'adminLogin']);
-Route::post('/register/admin', [RegisterController::class, 'createAdmin']);
+Route::controller(LoginController::class)->group(function(){
+    Route::get('/login/admin', 'showAdminLoginForm');
+    Route::post('/login/admin', 'adminLogin');
+});
 
-Route::group(['middleware' => 'auth:admin'], function () {
-    Route::view('/admin', 'admin');
+Route::controller(RegisterController::class)->group(function(){
+    Route::get('/register/admin', 'showAdminRegisterForm');
+    Route::post('/register/admin', 'createAdmin');
+});
+
+Route::controller(AdminController::class)->middleware('auth:admin')->group(function () {
+    Route::get('/admin', 'index');
 });
 
 Route::get('logout', [LoginController::class, 'logout']);
 
 Route::controller(HomeController::class)->group(function(){
-    Route::get('/home', [PostController::class, 'index'])->name('home');
     Route::get('/about','about')->name('about');
     Route::get('/contact','contact')->name('contact');
     Route::get('/profile','profile')->name('profile');
 });
+
 
 
 Route::controller(MessageController::class)->group(function(){
@@ -72,9 +75,11 @@ Route::middleware('auth')->controller(UserController::class)->group(function(){
 });
 
 
-Route::middleware(['auth'])->group(function () {
-    Route::resource('posts', PostController::class); //generates 7 standard routes
-    Route::post('/posts/{postId}/toggle-like', [PostController::class, 'toggleLike'])->name('posts.toggleLike');
-    Route::post('/posts/{postId}/comment', [PostController::class, 'addComment'])->name('posts.comment');
-    Route::resource('comments', CommentController::class)->except(['index', 'show']);
+Route::middleware('auth')->group(function () {
+    Route::resource('posts', PostController::class); 
+    Route::post('/posts/{postId}/toggle-like', [PostController::class,'toggleLike'])->name('posts.toggleLike');
+    Route::post('/posts/{postId}/comment', [PostController::class,'addComment'])->name('posts.comment');
+    Route::get('/home', [PostController::class,'index'])->name('home');
+    Route::resource('comments', CommentController::class)->except(['index', 'show']); 
 });
+
