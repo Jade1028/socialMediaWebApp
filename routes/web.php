@@ -40,7 +40,7 @@ Auth::routes(); // This is the default authentication routes: /login, /register,
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login/admin', 'showAdminLoginForm'); // Show the admin login form
-    Route::post('/login/admin', 'adminLogin')->middleware('throttle:100,10'); // Limit to 3 attempts every 10 minutes
+    Route::post('/login/admin', 'adminLogin')->middleware('throttle:3,10'); // Limit to 3 attempts every 10 minutes
 });
 
 Route::controller(RegisterController::class)->group(function () {
