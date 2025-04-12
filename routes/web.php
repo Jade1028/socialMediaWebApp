@@ -45,7 +45,7 @@ Route::controller(AdminController::class)->middleware('auth:admin')->group(funct
     Route::post('/admin/ban-user/{id}', 'banUser')->name('admin.banUser');
 });
 
-Route::get('logout', [LoginController::class, 'logout']);
+// Route::get('logout', [LoginController::class, 'logout']);
 
 Route::controller(HomeController::class)->group(function(){
     Route::get('/about','about')->name('about');

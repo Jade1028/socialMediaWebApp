@@ -10,10 +10,12 @@
 
         <p>We are glad to have you here. Explore our features and enjoy your stay.</p>
 
-        @if (Route::has('login'))
+        @if (Route::has('login') )
             <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                 @auth
                     <a href="{{ url('/home') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
+                @elseif(Auth::guard('admin')->check())
+                    <a href="{{ url('/admin') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Admin Dashboard</a>
                 @else
                     <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 

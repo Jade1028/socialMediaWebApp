@@ -9,12 +9,8 @@ class FriendController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Friend::class);
         $userId = auth()->id();
-
-        // Fetch friendships where the user is either user_id1 or user_id2
-        // $friendships = Friend::where('user_id1', $userId)
-        //                      ->orWhere('user_id2', $userId)
-        //                      ->get();
 
         $f1 = auth()->user()->friends;
         $f2 = auth()->user()->friendsOf;
@@ -46,6 +42,7 @@ class FriendController extends Controller
      */
     public function store($id)
     {
+        $this->authorize('create', Friend::class);
         $friend = new Friend;
         $friend->user_id1 = auth()->id();
         $friend->user_id2 = $id;
@@ -58,6 +55,7 @@ class FriendController extends Controller
     // accept friend request
     public function accept($id)
     {
+        $this->authorize('accept', Friend::class);
         $friend = Friend::where('user_id1', $id)
             ->where('user_id2', auth()->id())
             ->first();
@@ -71,6 +69,7 @@ class FriendController extends Controller
     // reject friend request
     public function reject($id)
     {
+        $this->authorize('reject', Friend::class);
         $friend = Friend::where('user_id1', $id)
             ->where('user_id2', auth()->id())
             ->first();
@@ -83,6 +82,7 @@ class FriendController extends Controller
     // unfriend function
     public function destroy($id)
     {
+        $this->authorize('delete', Friend::class);
         Friend::where('user_id1', $id)
             ->where('user_id2', auth()->id())
             ->orWhere(function ($query) use ($id) {

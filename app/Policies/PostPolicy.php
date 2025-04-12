@@ -13,7 +13,7 @@ class PostPolicy
     
     public function before(User $user){
         if($user->is_banned){
-            return false;
+            abort(403, 'Your account has been permanently banned.');
         }
         return null;
     }

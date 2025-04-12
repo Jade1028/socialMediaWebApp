@@ -17,7 +17,7 @@ class PostController extends Controller
 
     public function index()
     {
-        // *Laravel implicitly calls: $this->authorize('viewAny', $post)
+        // *Laravel implicitly calls: $this->authorize('viewAny')
         $posts = Post::with(['likes', 'user'])->orderBy('created_at', 'desc')->paginate(5);
         return view('home', ['posts' => $posts]);
     }
