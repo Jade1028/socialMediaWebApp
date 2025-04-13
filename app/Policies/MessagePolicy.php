@@ -10,6 +10,13 @@ class MessagePolicy
 {
     use HandlesAuthorization;
 
+    public function before(User $user){
+        if($user->is_banned){
+            abort(403, 'Your account has been permanently banned.');
+        }
+        return null;
+    }
+
     /**
      * Determine whether the user can view the model.
      *

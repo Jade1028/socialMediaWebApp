@@ -14,17 +14,13 @@ class MessageController extends Controller
     /*
         This method will retieve all the messages between the user and the friend but will only display 20 messages per page
     */
-    public function index($id)
+    public function show($id)
     {
         $user = auth()->user();
 
         if($user)
         {
             $friend = User::findOrFail($id);
-
-            if(! Gate::allows('view', [new Message(), $friend->id])){
-                abort(403, 'Unauthorized to view messages with this user.');
-            }
 
             $allMessages = Message::where(function($query) use ($user, $id){
                 $query->where('sender_id', $user->id)
@@ -50,10 +46,6 @@ class MessageController extends Controller
             'content'=> 'required|string'
         ]);
 
-        if(! Gate::allows('create', Message::class)){
-            abort(403, 'Unauthorized to send messages.');
-        }
-
         $message = new Message();
         $message->sender_id = auth()->id();
         $message->receiver_id = $id;
@@ -70,11 +62,6 @@ class MessageController extends Controller
     {
         $message = Message::findOrFail($id);
 
-        //Check the authenticated user is the sender of this message
-        if(! Gate::allows('edit', $message)){
-            abort(403, 'You are not allowed to edit this message.');
-        }
-
         return view('pages.message-edit', ['message'=>$message, 'friend'=>User::find($message->receiver_id)]);
     }
 
@@ -83,11 +70,6 @@ class MessageController extends Controller
     */
     public function update(Request $req, $id){
         $message = Message::findOrFail($id);
-
-        //Check the authenticated user is the sender of this message
-        if(! Gate::allows('update', $message)){
-            abort(403, 'You are not allowed to edit this message.');
-        }
 
         //Check the content is not empty and is string content
         $req->validate([
@@ -103,13 +85,8 @@ class MessageController extends Controller
     /*
         This method will delete the message with the given id
     */
-    public function destroy($id){
+    public function delete($id){
         $message = Message::findOrFail($id);
-
-        //Check the authenticated user is the sender of this message
-        if(! Gate::allows('delete', $message)){
-            abort(403, 'You are not allowed to delete this message.');
-        }
 
         $receiverId = $message->receiver_id;
         $message->delete();
