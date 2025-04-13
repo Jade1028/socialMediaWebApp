@@ -1,18 +1,16 @@
 @extends('layouts.app')
 
-@section('title', $friend->name)  {{-- Set the friend name as the title --}}
+@section('title', $friend->name)
 
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    {{-- Chat header --}}
-                    <div class="card-header">
-                        <strong>{{ $friend->name }}</strong>
+                    <div class="card-header text-center">
+                        <strong>{{ $friend->name }}</strong> <small class="text-muted">Chat</small>
                     </div>
 
-                    {{-- Chat messages --}}
                     <div class="card-body" style="height: 400px; overflow-y: auto;">
                         @foreach ($messages as $message)
                             <div class="mb-2 {{ auth()->id() === $message->sender_id ? 'text-right' : 'text-left' }}">
@@ -22,12 +20,11 @@
                                 </div>
 
                                 @if(auth()->id() === $message->sender_id)
-                                    {{-- Simple dropdown for message actions --}}
-                                    <form id="message-action-form-{{ $message->id }}" method="POST">
+                                    <form id="message-action-form-{{ $message->id }}" method="POST" class="d-inline-block ml-2">
                                         @csrf
                                         @method('DELETE')
 
-                                        <select onchange="handleAction(this, '{{ $message->id }}')" class="ml-2">
+                                        <select onchange="handleAction(this, '{{ $message->id }}')" class="form-control-sm">
                                             <option value="" selected disabled>Actions</option>
                                             <option value="edit">Edit</option>
                                             <option value="delete">Delete</option>
@@ -38,15 +35,16 @@
                         @endforeach
 
                         {{-- Pagination --}}
-                        {{ $messages->links() }}
+                        <div class="text-center">
+                            {{ $messages->links() }}
+                        </div>
                     </div>
 
-                    {{-- Message input --}}
                     <div class="card-footer">
                         <form action="{{ route('message.send', ['id' => $friend->id]) }}" method="POST">
                             @csrf
                             <div class="input-group">
-                                <textarea name="content" class="form-control" placeholder="Type your message..."></textarea>
+                                <textarea name="content" class="form-control" placeholder="Type your message..." rows="3" required></textarea>
                                 <button class="btn btn-primary ml-2" type="submit">Send</button>
                             </div>
                         </form>
@@ -70,7 +68,6 @@
                 }
             }
 
-            // Reset dropdown after action
             select.value = "";
         }
     </script>
