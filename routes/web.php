@@ -84,7 +84,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('comments', CommentController::class)->except(['index', 'show']);
 
     //Message
-    Route::get('/message/{id}', [MessageController::class, 'show'])->name('message.index');
+    Route::get('/message/{id}', [MessageController::class, 'show'])->name('messages.index');
     Route::post('/message/{id}', [MessageController::class, 'create'])->name('message.send');
     Route::get('/message/edit/{id}', [MessageController::class, 'edit'])->name('message.edit');
     Route::post('/message/update/{id}', [MessageController::class, 'update'])->name('message.update');

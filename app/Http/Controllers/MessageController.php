@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Gate;
 class MessageController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->authorizeResource(Message::class, 'message');
-    }
     //
 
     /*
@@ -22,22 +18,20 @@ class MessageController extends Controller
     public function show($id)
     {
         $user = auth()->user();
-
-        if($user)
-        {
-            $friend = User::findOrFail($id);
-
-            $allMessages = Message::where(function($query) use ($user, $id){
-                $query->where('sender_id', $user->id)
-                    ->where('receiver_id', $id);
-            })->orWhere(function($query) use ($user, $id){
-                $query->where('sender_id', $id)
-                    ->where('receiver_id', $user->id);
-            })->orderBy('created_at')->paginate(20);
-
-            return view('pages.message', ['messages' => $allMessages, 'friend' => User::find($id)]);
-        }
-        return redirect()->route('login');
+        $friend = User::findOrFail($id);
+    
+        // Check authorization for viewing conversation
+        $this->authorize('viewConversation', [Message::class, $id]);
+        
+        $allMessages = Message::where(function($query) use ($user, $id){
+            $query->where('sender_id', $user->id)
+                ->where('receiver_id', $id);
+        })->orWhere(function($query) use ($user, $id){
+            $query->where('sender_id', $id)
+                ->where('receiver_id', $user->id);
+        })->orderBy('created_at')->paginate(20);
+    
+        return view('pages.message', ['messages' => $allMessages, 'friend' => $friend]);
     }
 
     /*
@@ -46,6 +40,8 @@ class MessageController extends Controller
     public function create($id, Request $req)
     {
         $user = auth()->user();
+
+        $this->authorize('create', [Message::class, $id]);
 
         $req->validate([
             'content'=> 'required|string'
@@ -67,14 +63,19 @@ class MessageController extends Controller
     {
         $message = Message::findOrFail($id);
 
+        $this->authorize('edit', $message);
+
         return view('pages.message-edit', ['message'=>$message, 'friend'=>User::find($message->receiver_id)]);
     }
 
     /*
         This method will update the message with the given id
     */
-    public function update(Request $req, $id){
+    public function update(Request $req, $id)
+    {
         $message = Message::findOrFail($id);
+
+        $this->authorize('update', $message);
 
         //Check the content is not empty and is string content
         $req->validate([
@@ -90,8 +91,11 @@ class MessageController extends Controller
     /*
         This method will delete the message with the given id
     */
-    public function destroy($id){
+    public function destroy($id)
+    {
         $message = Message::findOrFail($id);
+
+        $this->authorize('destroy', $message);
 
         $receiverId = $message->receiver_id;
         $message->delete();

@@ -24,10 +24,17 @@ class MessagePolicy
      * @param  \App\Models\Message  $message
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Message $message, int $friendId)
+    public function view(User $user, Message $message)
     {
-        //Check the sender user id and the receiver user id 
-        return $user->id === auth()->id() && ($user->id === (int)$friendId || $this->areFriends($user->id, $friendId));
+        // Check if the user is either the sender or recipient of this message
+        return $user->id === $message->sender_id || $user->id === $message->receiver_id;
+    }
+    
+    // Add a new method for checking conversation access
+    public function viewConversation(User $user, $friendId)
+    {
+        // Check if the users are friends or have some other relationship that allows messaging
+        return $user->id !== $friendId && $this->areFriends($user->id, $friendId);
     }
     /**
      * View policy helper
