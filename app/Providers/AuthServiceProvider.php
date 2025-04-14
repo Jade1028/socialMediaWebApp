@@ -10,6 +10,7 @@ use App\Models\Comment;
 use App\Policies\CommentPolicy;
 use App\Policies\FriendPolicy;
 use App\Policies\PostPolicy;
+use App\Policies\ProfilePolicy;
 use App\Policies\MessagePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -29,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         Friend::class => FriendPolicy::class,
         Comment::class => CommentPolicy::class,
         Message::class => MessagePolicy::class,
-
+        User::class => ProfilePolicy::class,
     ];
 
     /**
@@ -40,9 +41,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        Gate::define('isOwner', function($userToCheck){
-            return Auth::user()->id === (int)$userToCheck;
-        });
     }
 }

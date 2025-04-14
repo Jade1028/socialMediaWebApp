@@ -82,7 +82,7 @@
 
                             <div class="dropdown-menu dropdown-menu-end {{$bgClass}}" aria-labelledby="navbarDropdown">
                                 @if(!Auth::guard('admin')->check())
-                                <a class="dropdown-item {{$textClass}}" href="">
+                                <a class="dropdown-item {{$textClass}}" href="{{ route('profile.show', ['id'=>Auth::user()->id]) }}">
                                     {{ __('Profile') }}
                                 </a>
                                 @endif
