@@ -45,9 +45,7 @@
                         <li class="nav-item">
                             <a class="nav-link {{ $textClass }}" href="{{route('friends')}}">{{ __('Friends') }}</a>
                         </li>
-                        <li class="nav-item {{ $textClass }}">
-                            <a class="nav-link {{ $textClass }}" href="">{{ __('Messages') }}</a>
-                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link {{ $textClass }}" href="{{ route('about') }}">{{ __('About') }}</a>
                         </li>
