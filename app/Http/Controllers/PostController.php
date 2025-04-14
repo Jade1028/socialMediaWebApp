@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
 
 class PostController extends Controller
 {
@@ -39,7 +37,7 @@ class PostController extends Controller
         Post::create([
             'title' => $request->title,
             'content' => $request->content,
-            'user_id' => Auth::id(),
+            'user_id' => auth()->id(),
         ]);
 
         return redirect()->route('home')->with('success', 'Post created successfully.');
@@ -83,7 +81,7 @@ class PostController extends Controller
 
     public function toggleLike($postId)
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Check if the user already liked the post
         if ($user->likes()->where('post_id', $postId)->exists()) {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -17,7 +16,7 @@ class CommentController extends Controller
 
         Comment::create([
             'post_id' => $request->post_id,
-            'user_id' => Auth::id(),
+            'user_id' => auth()->id(),
             'content' => $request->content,
         ]);
 
@@ -46,9 +45,6 @@ class CommentController extends Controller
 
     public function destroy(Comment $comment)
     {
-        // if (Auth::id() !== $comment->user_id) {
-        //     abort(403);
-        // }
         $this->authorize('delete', $comment);
 
         $comment->delete();
