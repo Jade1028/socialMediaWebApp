@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -89,4 +90,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/message/edit/{id}', [MessageController::class, 'edit'])->name('message.edit');
     Route::post('/message/update/{id}', [MessageController::class, 'update'])->name('message.update');
     Route::delete('/message/delete/{id}', [MessageController::class, 'delete'])->name('message.delete');
+
+    //Profile
+    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit/{id}', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 });
