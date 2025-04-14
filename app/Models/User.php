@@ -119,34 +119,4 @@ class User extends Authenticatable
         return $this->hasMany(Message::class, 'receiver_id');
     }
 
-
-    /*
-        Get all groupchats the user is a member of
-        A user can be a member of many group chats
-    */
-    public function groupChats()
-    {
-        return $this->belongsToMany(Groupchat::class, 'group_chat_members')
-            ->withPivot('role')
-            ->withTimestemps();
-    }
-
-
-    /*
-        Get all group chats created by this user
-    */
-    public function createdGroupChats()
-    {
-        return $this->hasMany(Groupchat::class, 'created_by');
-    }
-
-
-    /*
-        Get all group chat messages sent by this user
-    */
-    public function groupChatMessages()
-    {
-        return $this->hasMany(Groupchat_message::class, 'sender_id');
-    }
-
 }
