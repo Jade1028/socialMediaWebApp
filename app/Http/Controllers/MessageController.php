@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Gate;
 
 class MessageController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Message::class, 'message');
+    }
     //
 
     /*
@@ -85,7 +90,7 @@ class MessageController extends Controller
     /*
         This method will delete the message with the given id
     */
-    public function delete($id){
+    public function destroy($id){
         $message = Message::findOrFail($id);
 
         $receiverId = $message->receiver_id;

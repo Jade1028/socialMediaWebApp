@@ -70,7 +70,7 @@ class MessagePolicy
      * @param  \App\Models\Message  $message
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Message $message)
+    public function destroy(User $user, Message $message)
     {
         //Check if the user is the sender to delete the message
         return $user->id === $message->sender_id;

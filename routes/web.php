@@ -61,13 +61,6 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/profile', 'profile')->name('profile');
 });
 
-Route::controller(MessageController::class)->group(function () {
-    Route::get('/message/{id}', 'show')->name('messages.index');
-    Route::post('/message/{id}', 'create')->name('message.send');
-    Route::get('/message/edit/{id}', 'edit')->name('message.edit');
-    Route::post('/message/update/{id}', 'update')->name('message.update');
-    Route::delete('/message/delete/{id}', 'delete')->name('message.delete');
-});
 
 Route::middleware('auth')->controller(FriendController::class)->group(function () {
     Route::get('/friends', 'index')->name('friends');
@@ -89,4 +82,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/{postId}/comment', [PostController::class, 'addComment'])->name('posts.comment');
     Route::get('/home', [PostController::class, 'index'])->name('home');
     Route::resource('comments', CommentController::class)->except(['index', 'show']);
+
+    //Message
+    Route::get('/message/{id}', [MessageController::class, 'show'])->name('message.index');
+    Route::post('/message/{id}', [MessageController::class, 'create'])->name('message.send');
+    Route::get('/message/edit/{id}', [MessageController::class, 'edit'])->name('message.edit');
+    Route::post('/message/update/{id}', [MessageController::class, 'update'])->name('message.update');
+    Route::delete('/message/delete/{id}', [MessageController::class, 'delete'])->name('message.delete');
 });
