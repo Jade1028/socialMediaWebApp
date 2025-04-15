@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -27,18 +28,25 @@ class PostController extends Controller
     }
 
     public function store(Request $request)
+    // *Laravel implicitly calls: $this->authorize('create', $post)
     {
-        // *Laravel implicitly calls: $this->authorize('create', $post)
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        Post::create([
+        $data = [
             'title' => $request->title,
             'content' => $request->content,
             'user_id' => auth()->id(),
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $data['image_url'] = $request->file('image')->store('posts', 'public');
+        }
+
+        Post::create($data);
 
         return redirect()->route('home')->with('success', 'Post created successfully.');
     }
@@ -69,12 +77,25 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $post->update([
+        $data = [
             'title' => $request->title,
             'content' => $request->content,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            //delete the old img
+            if ($post->image_url && Storage::disk('public')->exists($post->image_url)) {
+                Storage::disk('public')->delete($post->image_url);
+            }
+
+            // Store the new image
+            $data['image_url'] = $request->file('image')->store('posts', 'public');
+        }
+
+        $post->update($data);
 
         return redirect()->route('home')->with('success', 'Post updated successfully.');
     }

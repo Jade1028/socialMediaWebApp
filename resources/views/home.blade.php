@@ -11,6 +11,23 @@
             padding: 10px;
             margin: 10px 0;
         }
+
+        .post-image {
+            margin: 15px 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .post-image img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .post-image img:hover {
+            transform: scale(1.02);
+        }
     </style>
 @endpush
 
@@ -34,7 +51,7 @@
                         @endif
 
                         @auth
-                            <a href="{{ route('posts.create') }}"  class="btn btn-primary mb-3">Create Post</a>
+                            <a href="{{ route('posts.create') }}" class="btn btn-primary mb-3">Create Post</a>
                         @endauth
 
                         @foreach($posts as $post)
@@ -44,8 +61,15 @@
                                 <h3>{{ $post->title }}</h3>
                                 <p>{{ $post->content }}</p>
 
+                                @if($post->image_url)
+                                    <div class="post-image">
+                                    <img src="/storage/{{ $post->image_url }}" alt="Post image" class="img-fluid mb-3">
+                                    </div>
+                                @endif
+
                                 <div>
-                                    <form action="{{ route('posts.toggleLike', $post->id) }}" method="POST" style="display:inline;">
+                                    <form action="{{ route('posts.toggleLike', $post->id) }}" method="POST"
+                                        style="display:inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-outline-primary">
                                             @if(auth()->user() && auth()->user()->likes()->where('post_id', $post->id)->exists())
@@ -56,13 +80,15 @@
                                         </button>
                                     </form>
 
-                                    <a href="{{ route('posts.show', $post->id) }}" class="btn btn-info">Comment ({{ $post->comments->count() }})</a>
+                                    <a href="{{ route('posts.show', $post->id) }}" class="btn btn-info">Comment
+                                        ({{ $post->comments->count() }})</a>
                                     <button class="btn btn-secondary">Send</button>
                                 </div>
                                 @auth
                                     @can('update', $post)
                                         <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-warning">Edit</a>
-                                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline;">
+                                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST"
+                                            onsubmit="return confirm('Are you sure?');" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Delete</button>
