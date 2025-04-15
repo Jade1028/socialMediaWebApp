@@ -14,29 +14,37 @@ class FriendFactory extends Factory
      */
     public function definition()
     {
-        // Get two different random users
-        $user1 = User::inRandomOrder()->first();
+        // Keep track of combinations we've already used
+        static $usedPairs = [];
 
-        // Get a different user (not the same as user1)
-        $user2 = User::where('id', '!=', $user1->id)
-            ->inRandomOrder()
-            ->first();
+        // Set a limit to prevent infinite loops
+        $attempts = 0;
+        $maxAttempts = 100;
 
-        // Ensure user_id1 is always the smaller ID to avoid duplicate pairs
-        /**
-         * example:
-         * 
-         * user1 = 9, user2 = 8
-         * 
-         * 9,8 and 8,9 are the same relationships
-         * so we just keep 8,9
-         * 
-         */
-        if ($user1->id > $user2->id) {
-            $temp = $user1;
-            $user1 = $user2;
-            $user2 = $temp;
-        }
+        do {
+            // Get two different random users
+            $user1 = User::inRandomOrder()->first();
+            $user2 = User::where('id', '!=', $user1->id)
+                ->inRandomOrder()
+                ->first();
+
+            // Create a unique key for this pair
+            $pairKey = $user1->id . '-' . $user2->id;
+
+            // Check if we've used this pair before
+            $isDuplicate = isset($usedPairs[$pairKey]);
+
+            $attempts++;
+
+            // If we've tried too many times, throw an exception
+            if ($attempts > $maxAttempts) {
+                throw new \Exception("Unable to generate unique friendship pair after $maxAttempts attempts");
+            }
+        } while ($isDuplicate);
+
+        // Mark this pair as used
+        $usedPairs[$pairKey] = true;
+
 
         return [
             'user_id1' => $user1->id,
