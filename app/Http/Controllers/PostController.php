@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Message;
+use App\Models\Friend;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -114,5 +116,24 @@ class PostController extends Controller
             $user->likes()->create(['post_id' => $postId]);
             return back()->with('success', 'Post liked.');
         }
+    }
+
+    public function shareViaMessage(Request $request, Post $post)
+    {
+        
+        $postUrl = route('posts.show', $post->id);
+        $messageContent = "Shared a post with you:\n\n".
+                        "\"" . $post->title . "\"\n\n".
+                        "<a href=\"{$postUrl}\">Click here to view post</a>";
+
+        $message = new Message([
+            'sender_id' => auth()->id(),
+            'receiver_id' => $request->friend_id,
+            'content' => $messageContent,
+        ]);
+
+        $message->save();
+
+        return back()->with('success', 'Post shared with friend successfully!');
     }
 }

@@ -1,5 +1,17 @@
 @extends('layouts.app')
-
+@push('styles')
+<style>
+    .bg-primary.text-white a {
+        color: white;
+        text-decoration: underline;
+    }
+    
+    .bg-primary.text-white a:hover {
+        color: #f0f0f0;
+        text-decoration: none;
+    }
+</style>
+@endpush
 @section('title', $friend->name)
 
 @section('content')
@@ -16,7 +28,7 @@
                             <div class="mb-2 {{ auth()->id() === $message->sender_id ? 'text-right' : 'text-left' }}">
                                 <div class="d-inline-block p-2 rounded 
                                     {{ auth()->id() === $message->sender_id ? 'bg-primary text-white' : 'bg-light border' }}">
-                                    {{ $message->content }}
+                                    {!! nl2br($message->content) !!}
                                 </div>
 
                                 @if(auth()->id() === $message->sender_id)

@@ -82,6 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/{postId}/toggle-like', [PostController::class, 'toggleLike'])->name('posts.toggleLike');
     Route::post('/posts/{postId}/comment', [PostController::class, 'addComment'])->name('posts.comment');
     Route::get('/home', [PostController::class, 'index'])->name('home');
+    Route::post('/posts/{post}/share-message', [PostController::class, 'shareViaMessage'])->name('posts.share-message');
     Route::resource('comments', CommentController::class)->except(['index', 'show']);
 
     //Message
@@ -89,7 +90,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/message/{id}', [MessageController::class, 'create'])->name('message.send');
     Route::get('/message/edit/{id}', [MessageController::class, 'edit'])->name('message.edit');
     Route::post('/message/update/{id}', [MessageController::class, 'update'])->name('message.update');
-    Route::delete('/message/delete/{id}', [MessageController::class, 'delete'])->name('message.delete');
+    Route::delete('/message/delete/{id}', [MessageController::class, 'destroy'])->name('message.delete');
 
     //Profile
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');

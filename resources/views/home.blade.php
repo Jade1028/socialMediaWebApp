@@ -82,7 +82,7 @@
 
                                     <a href="{{ route('posts.show', $post->id) }}" class="btn btn-info">Comment
                                         ({{ $post->comments->count() }})</a>
-                                    <button class="btn btn-secondary">Send</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#shareModal{{$post->id}}">Share</button>
                                 </div>
                                 @auth
                                     @can('update', $post)
@@ -95,6 +95,50 @@
                                         </form>
                                     @endcan
                                 @endauth
+                            </div>
+                        @endforeach
+                        @foreach($posts as $post)
+                            <div class="modal fade" id="shareModal{{$post->id}}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content {{ $bgClass}} {{ $textClass}}">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Share Post with Friend</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ route('posts.share-message', $post->id) }}" method="POST">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="friend_id">Select Friend</label>
+                                                    <select name="friend_id" class="form-control" required>
+                                                        <option value="">Choose a friend</option>
+                                                        @php
+                                                            $userId = auth()->id();
+                                                            // Get friendships where user is either sender or receiver
+                                                            $friendships = \App\Models\Friend::where(function($query) use ($userId) {
+                                                                $query->where('user_id1', $userId)
+                                                                      ->orWhere('user_id2', $userId);
+                                                                })->where('status', 'accepted')->get();
+                                                            @endphp
+    
+                                                        @foreach($friendships as $friendship)
+                                                            @php
+                                                                $friend = $friendship->user_id1 == $userId 
+                                                                    ? \App\Models\User::find($friendship->user_id2)
+                                                                    : \App\Models\User::find($friendship->user_id1);
+                                                            @endphp
+                                                            <option value="{{ $friend->id }}">{{ $friend->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Share Post</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         @endforeach
                     </div>
