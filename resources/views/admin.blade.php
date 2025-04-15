@@ -2,41 +2,47 @@
 @section('content')
 
 @push('styles')
-    <style>
-        .w-5 {
-            display: none;
-        }
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .row.justify-content-center {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .col-md-6 {
-            flex: 0 0 48%;
-            max-width: 48%;
-            margin: 1%;
-        }
-        .col-md-4 {
-            flex: 0 0 30%;
-            max-width: 30%;
-            margin: 1%;
-        }
-        .dashboard-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 2%;
-        }
-    </style>
+<style>
+    .w-5 {
+        display: none;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .row.justify-content-center {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .col-md-6 {
+        flex: 0 0 48%;
+        max-width: 48%;
+        margin: 1%;
+    }
+
+    .col-md-4 {
+        flex: 0 0 30%;
+        max-width: 30%;
+        margin: 1%;
+    }
+
+    .dashboard-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 2%;
+    }
+
+</style>
 @endpush
 <div class="container">
     @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
     @endif
     <div class="dashboard-container">
         <div class="col-md-4">
@@ -49,6 +55,11 @@
                         <hr>
                         <h3>{{ $post->title }}</h3>
                         <p>{{ $post->content }}</p>
+                        @if($post->image_url)
+                        <div class="post-image">
+                            <img src="/storage/{{ $post->image_url }}" alt="Post image" class="img-fluid mb-3">
+                        </div>
+                        @endif
 
                     </div>
                     <form action="{{ route('admin.deletePost', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline;">
@@ -56,7 +67,8 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
-                    <hr><hr>
+                    <hr>
+                    <hr>
                     @endforeach
                     <div class="pagination">
                         {{$posts->links()}}
@@ -75,12 +87,12 @@
                         <p>Email: {{ $user->email }}</p>
                         <p>Created at: {{ $user->created_at }}</p>
                         @if($user->is_banned)
-                            <p style="color: red; font-weight: bold;">Status: Banned</p>
+                        <p style="color: red; font-weight: bold;">Status: Banned</p>
                         @else
-                            <form action="{{route('admin.banUser', $user->id)}}" method='POST'>
-                                @csrf
-                                <button type="submit" class="btn btn-danger">Ban user</button>
-                            </form>
+                        <form action="{{route('admin.banUser', $user->id)}}" method='POST'>
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Ban user</button>
+                        </form>
                         @endif
                         <hr>
                         <hr>
