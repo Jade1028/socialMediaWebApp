@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
 
@@ -24,7 +25,9 @@ class ProfileController extends Controller
     {
         $user = User::findOrFail($id);
 
-        return view('pages.profile', ['user' => $user]);
+        $posts = Post::all()->where('user_id', $id);
+
+        return view('pages.profile', ['user' => $user, 'posts' => $posts]);
     }
 
     public function edit($id)
