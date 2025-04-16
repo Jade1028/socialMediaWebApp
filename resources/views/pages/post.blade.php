@@ -1,10 +1,37 @@
 @extends('layouts.app')
 @section('content')
+@push('styles')
+<style>
+    .post-image {
+        max-width: 500px;  /* Limit maximum width */
+        margin: 15px 0;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .post-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.3s ease;
+    }
+
+    .post-image img:hover {
+        transform: scale(1.02);
+    }
+</style>
+@endpush
     <div class="post-card">
         <a href="{{ route('home') }}">
             << Back</a>
                 <h2>{{ $post->title }}</h2>
                 <p>{{ $post->content }}</p>
+                @if($post->image_url)
+                    <div class="post-image">
+                    <img src="/storage/{{ $post->image_url }}" alt="Post image" class="img-fluid mb-3">
+                    </div>
+                @endif
 
                 <h3>Comments ({{ $post->comments->count() }})</h3>
 
