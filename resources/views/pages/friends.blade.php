@@ -28,7 +28,7 @@
 				@endif
 				@foreach($acceptedFriends as $friend)
 					<div style="display: flex; align-items: center; margin-bottom: 10px;">
-						<a href="{{ route('profile.show', ['id' => $friend->id]) }}" style="margin-right: 10px; color: black; font-weight: bold;">{{ $friend->name }}</a>
+						<a href="{{ route('profile.show', ['id' => $friend->id]) }}" style="margin-right: 10px; color: black; font-weight: bold;" class="{{$textClass}}">{{ $friend->name }}</a>
 						<a href="{{ route('messages.index', ['id' => $friend->id]) }}" class="btn btn-primary btn-sm">Message</a>
 						<a href="{{route('friends.destroy', $friend->id)}}" class="text-danger">Unfriend</a>
 					</div>
