@@ -14,12 +14,14 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('title');
             $table->text('content');
             $table->string('image_url')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');  //Create the foreign key user id
             $table->timestamps();
+           
         });
     }
 

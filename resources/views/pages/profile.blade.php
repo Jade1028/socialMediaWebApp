@@ -13,7 +13,7 @@
         <div class="col-md-8">
 
             {{-- Profile Card --}}
-            <div class="card mb-4">
+            <div class="card mb-4 {{ $bgClass }} {{ $textClass }} {{ $borderClass }}">
                 <div class="card-body">
                     <div class="row">
                         {{-- Profile Picture --}}
@@ -52,19 +52,19 @@
             </div>
 
             {{-- User Posts --}}
-            <div class="card">
+            <div class="card {{ $bgClass }} {{ $textClass }} {{ $borderClass }}">
                 <div class="card-body">
                     <h4 class="card-title">{{ $user->name }}'s Posts</h4>
 
                     @if($posts->isNotEmpty())
                         @foreach($posts as $post)
                             <a href="{{ route('posts.show', $post->id) }}" class="text-decoration-none text-dark">
-                                <div class="card mb-3 hover-shadow">
-                                    <div class="card-body">
+                                <div class="card mb-3 hover-shadow {{ $bgClass }} {{ $textClass }} {{ $borderClass }}">
+                                    <div class="card-body ">
                                         <h5 class="card-title">{{ $post->title }}</h5>
                                         <p class="card-text">{{ \Illuminate\Support\Str::limit($post->content, 150) }}</p>
-                                        <p class="card-text">
-                                            <small class="text-muted">Posted on {{ $post->created_at->format('M d, Y') }}</small>
+                                        <p class="{{ $bgClass }} {{ $textClass }} {{ $borderClass }}">
+                                            <small>Posted on {{ $post->created_at->format('M d, Y') }}</small>
                                         </p>
                                     </div>
                                 </div>

@@ -14,6 +14,7 @@ class CreateFriendsTable extends Migration
     public function up()
     {
         Schema::create('friends', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->foreignId('user_id1')->constrained('users')->onDelete('cascade');  //Create the foreign key user id
             $table->foreignId('user_id2')->constrained('users')->onDelete('cascade');  //Create the foreign key user id for this user's friend
@@ -23,6 +24,7 @@ class CreateFriendsTable extends Migration
             // Ensure the same relationship does not repeat in any order
             $table->unique(['user_id1', 'user_id2']);
             $table->unique(['user_id2', 'user_id1']);
+            
         });
     }
 

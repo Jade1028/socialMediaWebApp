@@ -14,11 +14,13 @@ class CreateCommentsTable extends Migration
     public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->foreignId('post_id')->constrained('posts')->onDelete('cascade');  //Create the foreign key post id
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');  //Create the foreign key user id
             $table->text('content');
             $table->timestamps();
+            
         });
     }
 
