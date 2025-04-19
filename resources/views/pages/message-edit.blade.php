@@ -5,11 +5,11 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header text-center">
+                    <div class="card-header text-center {{ $bgClass}} {{ $textClass}} {{ $borderClass}}">
                         <h4>Edit Message</h4>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body {{ $bgClass}} {{ $textClass}} {{ $borderClass}}">
                         @if(isset($message))
                             <form action="{{ route('message.update', ['id' => $message->id]) }}" method="POST">
                                 @csrf
