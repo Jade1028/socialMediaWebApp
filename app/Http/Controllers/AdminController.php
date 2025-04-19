@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     public function index(){
-        $posts = Post::with(['likes', 'user'])->orderBy('created_at', 'desc')->paginate(5, ['*'], 'posts_page');
+        $posts = Post::with('user')->orderBy('created_at', 'desc')->paginate(5, ['*'], 'posts_page');
         $users = User::where('is_banned', false)->orWhere('is_banned', null)->orderBy('updated_at', 'desc')->paginate(5, ['*'], 'users_page');
         $bannedUsers = User::where('is_banned', true)->orderBy('updated_at', 'desc')->paginate(5, ['*'], 'banned_users_page');
         return view('admin', compact('posts', 'users', 'bannedUsers'));
